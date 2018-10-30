@@ -2,12 +2,12 @@ package io.pivotal.pal.tracker;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/time-entries")
 public class TimeEntryController {
     private TimeEntryRepository timeEntryRepository;
 
@@ -15,30 +15,30 @@ public class TimeEntryController {
         this.timeEntryRepository = timeEntryRepository;
     }
 
-    @RequestMapping
-    public ResponseEntity<TimeEntry> create(TimeEntry timeEntryToCreate) {
+    @PostMapping
+    public ResponseEntity<TimeEntry> create(@RequestBody TimeEntry timeEntryToCreate) {
         return ResponseEntity.status(HttpStatus.CREATED).body(timeEntryRepository.create(timeEntryToCreate));
     }
 
-    @RequestMapping
-    public ResponseEntity<TimeEntry> read(long timeEntryId) {
+    @GetMapping("{timeEntryId}")
+    public ResponseEntity<TimeEntry> read(@PathVariable long timeEntryId) {
         TimeEntry timeEntry = timeEntryRepository.find(timeEntryId);
         return ResponseEntity.status(timeEntry == null ? HttpStatus.NOT_FOUND:HttpStatus.OK).body(timeEntry);
     }
 
-    @RequestMapping
-    public ResponseEntity update(long timeEntryId, TimeEntry expected) {
+    @PutMapping("{timeEntryId}")
+    public ResponseEntity update(@PathVariable long timeEntryId, @RequestBody TimeEntry expected) {
         TimeEntry timeEntry = timeEntryRepository.update(timeEntryId,expected);
         return ResponseEntity.status(timeEntry == null ? HttpStatus.NOT_FOUND:HttpStatus.OK).body(timeEntry);
     }
 
-    @RequestMapping
-    public ResponseEntity<TimeEntry> delete(long timeEntryId) {
+    @DeleteMapping("{timeEntryId}")
+    public ResponseEntity<TimeEntry> delete(@PathVariable long timeEntryId) {
         timeEntryRepository.delete(timeEntryId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
-    @RequestMapping
+    @GetMapping
     public ResponseEntity<List<TimeEntry>> list() {
         return ResponseEntity.ok(timeEntryRepository.list());
     }
