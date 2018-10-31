@@ -1,5 +1,6 @@
 package io.pivotal.pal.tracker;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +21,7 @@ public class InMemoryTimeEntryRepository implements TimeEntryRepository {
     }
 
     public List<TimeEntry> list() {
-        return dataStore.values().stream()
-                .collect(Collectors.toList());
+        return new ArrayList<>(dataStore.values());
 //        List<TimeEntry> theList = new ArrayList();
 //        for (TimeEntry entry: dataStore.values()) {
 //            theList.add(entry);
